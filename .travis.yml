@@ -6,6 +6,6 @@ env:
   - container_image="intersystemsdc/iris-community:2019.4.0.383.0-zpm"
 install:
   - docker pull $container_image
-  - docker run iris -d -s -h --name iris --init $container_image
+  - docker run -d -s -h iris --name iris --init $container_image
   - objectscript='zpm "install "objectscript-math" halt'
   - echo "$objectscript" | iris session iris -B
