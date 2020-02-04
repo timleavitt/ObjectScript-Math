@@ -1,0 +1,6 @@
+language: minimal
+os: linux
+services:
+  - docker
+install:
+  - docker pull intersystemsdc/iris-community:2019.4.0.383.0-zpm
