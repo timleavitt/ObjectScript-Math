@@ -2,5 +2,7 @@ language: minimal
 os: linux
 services:
   - docker
+env:
+  - container_image="intersystemsdc/iris-community:2019.4.0.383.0-zpm"
 install:
-  - docker pull intersystemsdc/iris-community:2019.4.0.383.0-zpm
+  - docker pull $container_image
