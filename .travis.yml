@@ -8,5 +8,5 @@ env:
 install:
   - docker pull $container_image
   - docker run -d -h $instance --name $instance --init $container_image -s
-  - objectscript='zpm "install "objectscript-math" halt'
+  - objectscript='zpm "install objectscript-math" halt'
   - docker exec -it $instance echo $objectscript | iris session $instance -B
