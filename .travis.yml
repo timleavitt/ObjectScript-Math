@@ -9,7 +9,10 @@ install:
   - docker pull $container_image
   - docker run -d -h $instance --name $instance --init $container_image -s
   - docker ps
-  - docker logs
-  - objectscript='zpm "install objectscript-math" halt'
-  - echo $objectscript > command.txt
-  - docker exec --interactive $instance iris session $instance -B < command.txt
+  - docker logs $instance
+  - echo 'zpm "install objectscript-math" halt' > build
+  - echo "halt" > wait
+  - cat wait
+  - cat build
+  - until docker exec --interactive $instance iris session $instance < wait; do sleep 1; done # Wait for instance to be ready
+  - docker exec --interactive $instance iris session $instance -B < build
