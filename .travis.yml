@@ -15,7 +15,7 @@ install:
 script:
   - >
     echo
-    'set good = ##class(%ZPM.PackageManager).Shell("install objectscript-math")
+    'set good = ##class(%ZPM.PackageManager).Shell("install objectscript-math -verbose")
     write !
     if good<1 do $System.Process.Terminate($job,1)
     halt' > build
