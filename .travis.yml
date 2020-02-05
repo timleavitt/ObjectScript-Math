@@ -10,4 +10,4 @@ install:
   - docker run -d -h $instance --name $instance --init $container_image -s
   - objectscript='zpm "install objectscript-math" halt'
   - echo $objectscript > command.txt
-  - docker exec -it $instance iris session $instance -B < command.txt
+  - docker exec --interactive $instance iris session $instance -B < command.txt
