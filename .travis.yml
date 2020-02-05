@@ -5,9 +5,10 @@ services:
 env:
   - container_image="intersystemsdc/iris-community:2019.4.0.383.0-zpm"
     instance="iris"
+    package="objectscript-math"
 install:
   - docker pull $container_image
-  - docker run -d -h $instance --name $instance --init $container_image
+  - "docker run -d -h $instance --name $instance -v $TRAVIS_BUILD_DIR:/source --init $container_image"
   - docker ps
   - docker logs $instance
   - echo halt > wait
@@ -15,14 +16,14 @@ install:
 script:
   - >
     echo
-    'set good = ##class(%ZPM.PackageManager).Shell("install objectscript-math -verbose")
+    "set good = ##class(%ZPM.PackageManager).Shell(\"load /source -verbose\")
     write !
-    if good<1 do $System.Process.Terminate($job,1)
-    halt' > build
+    if good<1 do \$System.Process.Terminate(\$job,1)
+    halt" > build
   - >
     echo
-    'set good = ##class(%ZPM.PackageManager).Shell("objectscript-math test -only -verbose -DUnitTest.JUnitOutput=junit.xml -DUnitTest.FailuresAreFatal=1")
+    "set good = ##class(%ZPM.PackageManager).Shell(\"$package test -only -verbose -DUnitTest.JUnitOutput=/source/junit.xml -DUnitTest.FailuresAreFatal=1\")
     write !
-    if good<1 do $System.Process.Terminate($job,1)
-    halt' > test
+    if good<1 do \$System.Process.Terminate(\$job,1)
+    halt" > test
   - docker exec --interactive $instance iris session $instance -B < build && docker exec --interactive $instance iris session $instance -B < test
