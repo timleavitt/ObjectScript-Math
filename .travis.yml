@@ -13,7 +13,7 @@ install:
   - echo halt > wait
   - until docker exec --interactive $instance iris session $instance < wait; do sleep 1; done # Wait for instance to be ready
 script:
-  - echo 'zpm "install objectscript-math" halt' > build
+  - echo 'zpm "install objectscript-math" write ! halt' > build
   - docker exec --interactive $instance iris session $instance -B < build
-  - echo 'zpm "objectscript-math test -only -verbose -DUnitTest.JUnitOutput=junit.xml" halt' > test
+  - echo 'zpm "objectscript-math test -only -verbose -DUnitTest.JUnitOutput=junit.xml" write ! halt' > test
   - docker exec --interactive $instance iris session $instance -B < test
