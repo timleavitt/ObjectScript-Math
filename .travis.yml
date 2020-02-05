@@ -7,7 +7,7 @@ env:
     instance="iris"
 install:
   - docker pull $container_image
-  - docker run -d -h $instance --name $instance --init $container_image -s
+  - docker run -d -h $instance --name $instance --init $container_image -s true
   - docker ps
   - docker logs $instance
   - echo 'zpm "install objectscript-math" halt' > build
