@@ -6,6 +6,7 @@ env:
   - container_image="intersystemsdc/iris-community:2019.4.0.383.0-zpm"
     instance="iris"
     package="objectscript-math"
+    flags="-verbose"
 install:
   - docker pull $container_image
   - "docker run -d -h $instance --name $instance -v $TRAVIS_BUILD_DIR:/source --init $container_image"
@@ -16,13 +17,13 @@ install:
 script:
   - >
     echo
-    "set good = ##class(%ZPM.PackageManager).Shell(\"load /source -verbose\")
+    "set good = ##class(%ZPM.PackageManager).Shell(\"load /source $flags\")
     write !
     if good<1 do \$System.Process.Terminate(\$job,1)
     halt" > build
   - >
     echo
-    "set good = ##class(%ZPM.PackageManager).Shell(\"$package test -only -verbose -DUnitTest.JUnitOutput=/source/junit.xml -DUnitTest.FailuresAreFatal=1\")
+    "set good = ##class(%ZPM.PackageManager).Shell(\"$package test -only $flags -DUnitTest.JUnitOutput=/source/junit.xml -DUnitTest.FailuresAreFatal=1\")
     write !
     if good<1 do \$System.Process.Terminate(\$job,1)
     halt" > test
