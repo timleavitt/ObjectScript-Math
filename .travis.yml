@@ -19,12 +19,12 @@ script:
     echo
     "set good = ##class(%ZPM.PackageManager).Shell(\"load /source $flags\")
     write !
-    if good<1 do \$System.Process.Terminate(\$job,1)
+    if good<1 { do \$System.Process.Terminate(\$job,1) }
     halt" > build
   - >
     echo
     "set good = ##class(%ZPM.PackageManager).Shell(\"$package test -only $flags -DUnitTest.JUnitOutput=/source/junit.xml -DUnitTest.FailuresAreFatal=1\")
     write !
-    if good<1 do \$System.Process.Terminate(\$job,1)
+    if good<1 { do \$System.Process.Terminate(\$job,1) }
     halt" > test
   - docker exec --interactive $instance iris session $instance -B < build && docker exec --interactive $instance iris session $instance -B < test
