@@ -13,7 +13,17 @@ install:
   - echo halt > wait
   - until docker exec --interactive $instance iris session $instance < wait; do sleep 1; done # Wait for instance to be ready
 script:
-  - echo 'set good = ##class(%ZPM.PackageManager).Shell("install objectscript-math") write ! if good<1 do $System.Process.Terminate($job,1) halt' > test
+  - >
+    echo
+    'set good = ##class(%ZPM.PackageManager).Shell("install objectscript-math")
+    write !
+    if good<1 do $System.Process.Terminate($job,1)
+    halt' > test
   - docker exec --interactive $instance iris session $instance -B < build
-  - echo 'set good = ##class(%ZPM.PackageManager).Shell("objectscript-math test -only -verbose -DUnitTest.JUnitOutput=junit.xml -DUnitTest.FailuresAreFatal=1") write ! if good<1 do $System.Process.Terminate($job,1) halt' > test
+  - >
+    echo
+    'set good = ##class(%ZPM.PackageManager).Shell("objectscript-math test -only -verbose -DUnitTest.JUnitOutput=junit.xml -DUnitTest.FailuresAreFatal=1")
+    write !
+    if good<1 do $System.Process.Terminate($job,1)
+    halt' > test
   - docker exec --interactive $instance iris session $instance -B < test
