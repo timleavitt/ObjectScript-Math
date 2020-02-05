@@ -6,6 +6,7 @@ Class Math.Utils
 /// If <var>pIntegers</var> has no data or subscript 1 has no data, it will return an error
 ClassMethod ValidateInput(pIntegers... As %Integer) As %Status
 {
+}
 	Set tSC=$$$OK
 	
 	If ('$Data(pIntegers))||(($Data(pIntegers))&&(pIntegers(1)="")) {
