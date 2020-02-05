@@ -1,4 +1,4 @@
-Class Math.Utils Extends Fake.Class
+Class Math.Utils
 {
 
 /// This method will validate the input to confirm there are values to process</br>
