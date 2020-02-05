@@ -10,7 +10,10 @@ install:
   - docker run -d -h $instance --name $instance --init $container_image
   - docker ps
   - docker logs $instance
-  - until docker exec --interactive $instance iris session $instance < `echo halt`; do sleep 1; done # Wait for instance to be ready
+  - echo halt > wait
+  - until docker exec --interactive $instance iris session $instance < wait; do sleep 1; done # Wait for instance to be ready
 script:
-  - docker exec --interactive $instance iris session $instance -B < `echo 'zpm "install objectscript-math" halt'`
-  - docker exec --interactive $instance iris session $instance -B < `echo 'zpm "objectscript-math test -only -verbose -DUnitTest.JUnitOutput=junit.xml" halt'`
+  - echo 'zpm "install objectscript-math" halt' > build
+  - docker exec --interactive $instance iris session $instance -B < build
+  - echo 'zpm "objectscript-math test -only -verbose -DUnitTest.JUnitOutput=junit.xml" halt' > test
+  - docker exec --interactive $instance iris session $instance -B < test
