@@ -1,29 +1,44 @@
 language: minimal
+
 os: linux
+
 services:
   - docker
+
 env:
   - container_image="intersystemsdc/iris-community:2019.4.0.383.0-zpm"
     instance="iris"
     package="objectscript-math"
-    flags="-verbose"
+    build_flags="-verbose"
+    test_flags="-verbose -DUnitTest.JUnitOutput=/source/junit.xml -DUnitTest.FailuresAreFatal=1 -DUnitTest.Manager=TestCoverage.Manager"
+
 install:
+  # Run InterSystems IRIS instance
   - docker pull $container_image
-  - "docker run -d -h $instance --name $instance -v $TRAVIS_BUILD_DIR:/source --init $container_image"
-  - docker ps
-  - docker logs $instance
+  - docker run -d -h $instance --name $instance -v $TRAVIS_BUILD_DIR:/source --init $container_image
   - echo halt > wait
   - until docker exec --interactive $instance iris session $instance < wait; do sleep 1; done # Wait for instance to be ready
-script:
+  # Install TestCoverage
   - >
     echo
-    "set good = ##class(%ZPM.PackageManager).Shell(\"load /source $flags\")
+    "set good = ##class(%ZPM.PackageManager).Shell(\"install testcoverage\")
+    write !
+    if good<1 { do \$System.Process.Terminate(\$job,1) }
+    halt" > install-testcoverage
+  - docker exec --interactive $instance iris session $instance -B < install-testcoverage
+
+script:
+  # Run build
+  - >
+    echo
+    "set good = ##class(%ZPM.PackageManager).Shell(\"load /source $build_flags\")
     write !
     if good<1 { do \$System.Process.Terminate(\$job,1) }
     halt" > build
+  # Run tests
   - >
     echo
-    "set good = ##class(%ZPM.PackageManager).Shell(\"$package test -only $flags -DUnitTest.JUnitOutput=/source/junit.xml -DUnitTest.FailuresAreFatal=1\")
+    "set good = ##class(%ZPM.PackageManager).Shell(\"$package test verify -only $test_flags\")
     write !
     if good<1 { do \$System.Process.Terminate(\$job,1) }
     halt" > test
