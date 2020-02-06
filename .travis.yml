@@ -38,7 +38,7 @@ script:
   # Run tests
   - >
     echo
-    "set good = ##class(%ZPM.PackageManager).Shell(\"$package test verify -only $test_flags\")
+    "set good = ##class(%ZPM.PackageManager).Shell(\"$package test -only $test_flags\")
     write !
     if good<1 { do \$System.Process.Terminate(\$job,1) }
     halt" > test
