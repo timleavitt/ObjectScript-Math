@@ -41,10 +41,11 @@ script:
     write !
     if good<1 { do \$System.Process.Terminate(\$job,1) }
     halt" > build
-  # Run tests
+  # Run tests (with workaround for https://github.com/intersystems-community/zpm/pull/30 - test result will always be index 1)
   - >
     echo
-    "set good = ##class(%ZPM.PackageManager).Shell(\"$package test -only $test_flags\")
+    "set ^||%UnitTest.Manager.LastResult = 1
+    set good = ##class(%ZPM.PackageManager).Shell(\"$package test -only $test_flags\")
     write !
     if good<1 { do \$System.Process.Terminate(\$job,1) }
     halt" > test
