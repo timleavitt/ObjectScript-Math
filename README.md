@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/timleavitt/ObjectScript-Math.svg?branch=master)](https://travis-ci.com/timleavitt/ObjectScript-Math) [![codecov](https://codecov.io/gh/timleavitt/ObjectScript-Math/branch/master/graph/badge.svg)](https://codecov.io/gh/timleavitt/ObjectScript-Math)
+
 # ObjectScript-Math
 Math library for InterSystems ObjectScript. This library contains functions that are both standard to ObjectScript as well as functions that are not. For example TODO.
 
