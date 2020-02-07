@@ -30,6 +30,8 @@ install:
     if good<1 { do \$System.Process.Terminate(\$job,1) }
     halt" > install-testcoverage
   - docker exec --interactive $instance iris session $instance -B < install-testcoverage
+  # Workaround for permissions issues in TestCoverage (creating directory for source export)
+  - mkdir $TRAVIS_BUILD_DIR/source
 
 script:
   # Run build
