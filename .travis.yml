@@ -11,7 +11,7 @@ env:
     package="objectscript-math"
     build_flags="-verbose"
     >
-    test_flags="-verbose -DUnitTest.JUnitOutput=/source/junit.xml
+    test_flags="-verbose -DUnitTest.ManagerClass=TestCoverage.Manager -DUnitTest.JUnitOutput=/source/junit.xml
     -DUnitTest.FailuresAreFatal=1 -DUnitTest.Manager=TestCoverage.Manager
     -DUnitTest.UserParam.CoverageReportClass=TestCoverage.Report.Cobertura.ReportGenerator
     -DUnitTest.UserParam.CoverageReportFile=/source/coverage.xml"
