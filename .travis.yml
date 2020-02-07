@@ -10,7 +10,11 @@ env:
     instance="iris"
     package="objectscript-math"
     build_flags="-verbose"
-    test_flags="-verbose -DUnitTest.JUnitOutput=/source/junit.xml -DUnitTest.FailuresAreFatal=1 -DUnitTest.Manager=TestCoverage.Manager"
+    >
+    test_flags="-verbose -DUnitTest.JUnitOutput=/source/junit.xml
+    -DUnitTest.FailuresAreFatal=1 -DUnitTest.Manager=TestCoverage.Manager
+    -DUnitTest.UserParam.CoverageReportClass=TestCoverage.Report.Cobertura.ReportGenerator
+    -DUnitTest.UserParam.CoverageReportFile=/source/coverage.xml"
 
 install:
   # Run InterSystems IRIS instance
@@ -43,3 +47,7 @@ script:
     if good<1 { do \$System.Process.Terminate(\$job,1) }
     halt" > test
   - docker exec --interactive $instance iris session $instance -B < build && docker exec --interactive $instance iris session $instance -B < test
+
+after_success:
+  # Publish to codecov
+  - bash <(curl -s https://codecov.io/bash)
