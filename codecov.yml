@@ -1,2 +1,2 @@
 fixes:
-  - "::src/cls/"         # move root
+#  - "::src/cls/"         # move root
