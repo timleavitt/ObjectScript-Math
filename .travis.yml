@@ -26,7 +26,7 @@ install:
   # Wait for instance to be ready
   - until docker exec --interactive $instance iris session $instance < wait; do sleep 1; done
   # Install TestCoverage
-  - echo "zpm \"install testcoverage\"":1:1" > install-testcoverage
+  - echo "zpm \"install testcoverage\":1:1" > install-testcoverage
   - docker exec --interactive $instance iris session $instance -B < install-testcoverage
   # Workaround for permissions issues in TestCoverage (creating directory for source export)
   - chmod 777 $TRAVIS_BUILD_DIR
