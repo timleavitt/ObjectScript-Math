@@ -23,34 +23,19 @@ install:
   - docker pull $container_image
   - docker run -d -h $instance --name $instance -v $TRAVIS_BUILD_DIR:/source --init $container_image
   - echo halt > wait
-  - until docker exec --interactive $instance iris session $instance < wait; do sleep 1; done # Wait for instance to be ready
+  # Wait for instance to be ready
+  - until docker exec --interactive $instance iris session $instance < wait; do sleep 1; done
   # Install TestCoverage
-  - >
-    echo
-    "set good = ##class(%ZPM.PackageManager).Shell(\"install testcoverage\")
-    write !
-    if good<1 { do \$System.Process.Terminate(\$job,1) }
-    halt" > install-testcoverage
+  - echo "zpm \"install testcoverage\":1:1" > install-testcoverage
   - docker exec --interactive $instance iris session $instance -B < install-testcoverage
   # Workaround for permissions issues in TestCoverage (creating directory for source export)
   - chmod 777 $TRAVIS_BUILD_DIR
 
 script:
   # Run build
-  - >
-    echo
-    "set good = ##class(%ZPM.PackageManager).Shell(\"load /source $build_flags\")
-    write !
-    if good<1 { do \$System.Process.Terminate(\$job,1) }
-    halt" > build
-  # Run tests (with workaround for https://github.com/intersystems-community/zpm/pull/30 - test result will always be index 1)
-  - >
-    echo
-    "set ^||%UnitTest.Manager.LastResult = 1
-    set good = ##class(%ZPM.PackageManager).Shell(\"$package test -only $test_flags\")
-    write !
-    if good<1 { do \$System.Process.Terminate(\$job,1) }
-    halt" > test
+  - echo "zpm \"load /source $build_flags\":1:1" > build
+  # Run tests
+  - echo "zpm \"$package test -only $test_flags\":1:1" > test
   - docker exec --interactive $instance iris session $instance -B < build && docker exec --interactive $instance iris session $instance -B < test
 
 after_success:
