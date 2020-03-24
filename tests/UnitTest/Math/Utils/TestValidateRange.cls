@@ -1,4 +1,4 @@
-Class UnitTests.TestUtils.TestValidateRange Extends %UnitTest.TestCase
+Class UnitTest.Math.Utils.TestValidateRange Extends %UnitTest.TestCase
 {
 
 Method TestAllNull()

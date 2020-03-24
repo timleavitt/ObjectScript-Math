@@ -1,4 +1,4 @@
-Class UnitTests.TestUtils.TestValidateInput Extends %UnitTest.TestCase
+Class UnitTest.Math.Utils.TestValidateInput Extends %UnitTest.TestCase
 {
 
 Method TestNull()

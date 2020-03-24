@@ -1,6 +1,6 @@
 Include Math
 
-Class UnitTests.TestMath.TestFactorial Extends %UnitTest.TestCase
+Class UnitTest.Math.Math.TestFactorial Extends %UnitTest.TestCase
 {
 
 Method TestSmall()
